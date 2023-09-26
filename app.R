@@ -1,6 +1,3 @@
-#install.packages("shiny")
-#install.packages("shinyjs")
-#install.packages("shinyBS")
 library(shiny)
 library(av)
 
@@ -45,7 +42,6 @@ ui <- fluidPage(
   )
 )
 
-
 # Define server logic
 server <- function(input, output,session) {
   session$onSessionEnded({
@@ -59,22 +55,14 @@ server <- function(input, output,session) {
   
   image_files <- reactive({
     if (input$folder != 0) {
-      #setwd(folder())
-      #files <- list.files(getwd(), pattern = "\\.png$")  # Assuming your image files have a .png extension
-      
       details = file.info(list.files(pattern="*.png"))
       
       # Sort the files
-      
       if(input$order == "Modified"){details <- details[with(details, order(as.POSIXct(mtime))), ]}
       if(input$order == "Created"){details <- details[with(details, order(as.POSIXct(ctime))), ]}
-      #if(input$order == ""){details = details[with(details, order(as.POSIXct(atime))), ]}
       if(input$order == "Size"){details <- details[with(details, order(size)), ]}
       if(input$order == "Name"){details <- details %>% arrange(row.names(details))}
       files = rownames(details)
-      
-     
-
       return(files)
     }
   })
@@ -91,7 +79,7 @@ server <- function(input, output,session) {
             path <- paste0(choose.dir("", "Save Output"), "/output.mp4")
             # Video creation code here
             av::av_encode_video(image_files(), path, framerate = input$frames)
-            
+            # Report Succes of Video Creation
             showModal(modalDialog(
               title = span(h3(strong("Your output has been saved!"), style = 'font-size:16px;color:#6cbabf;'))
             ))
@@ -102,14 +90,6 @@ server <- function(input, output,session) {
       }
     }
   })
-  
-
-    #if("output.mp4" %in% list.files(paste0(dirname(rstudioapi::getSourceEditorContext()$path), "/www"))){file.remove(paste0(dirname(rstudioapi::getSourceEditorContext()$path), "/www/output.mp4"))}
-    #file.copy(from = file.choose(), to = paste0(dirname(rstudioapi::getSourceEditorContext()$path), "/www/output.mp4"))
-
-
-    
-
 }
 
 # Run the application 
