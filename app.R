@@ -4,6 +4,35 @@ library(av)
 
 # Define UI for application that creates and displays a video
 ui <- fluidPage(
+  tags$style(
+    HTML(
+      "
+      body, html {
+        height: 100%;
+        margin: 0;
+      }
+      #matrix-iframe-container {
+        position: absolute;
+        width: 100%;
+        height: 70%; /* Adjust the height as needed */
+        top: 0;
+        left: 0;
+        background-color: white; /* Set background color for upper half */
+        z-index: 2;
+      }
+      #matrix-iframe {
+        position: absolute;
+        width: 100%;
+        height: 70%; /* Adjust the height as needed */
+        bottom: 0;
+        left: 0;
+        border: none;
+        z-index: 1;
+      }
+      "
+    )
+  ),
+  tags$iframe(id = "matrix-iframe", src = "matrix_background.html", frameborder = "0"),
   # Application title
   titlePanel("Video Creator App"),
   
