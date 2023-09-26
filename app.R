@@ -27,7 +27,7 @@ ui <- fluidPage(
         bottom: 0;
         left: 0;
         border: none;
-        z-index: 1;
+        z-index: ;
       }
       "
     )
