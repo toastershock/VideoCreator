@@ -107,12 +107,34 @@ server <- function(input, output,session) {
           expr = {
             path <- paste0(choose.dir("", "Save Output"), "/output.mp4")
             # Video creation code here
-            av::av_encode_video(image_files(), path, framerate = input$frames)
+            ##av::av_encode_video(image_files(), path, framerate = input$frames)
+            video_function <- function(images, path, frames){
+              tryCatch(
+                #try to do this
+                {
+                  av::av_encode_video(images, path, framerate = frames)
+                  showModal(modalDialog(
+                    title = span(h3(strong("Your output has been saved!"), style = 'font-size:16px;color:#6cbabf;'))))
+                },
+                #if an error occurs, tell me the error
+                error=function(e) {
+                  showModal(modalDialog(
+                    title = span(h3(strong("An Error Occurred!"), 
+                                    style = 'font-size:16px;color:#6cbabf;')),paste(e)))
+                  #message('An Error Occurred')
+                  
+                },
+                #if a warning occurs, tell me the warning
+                warning=function(w) {
+                  message('A Warning Occurred')
+                  print(w)
+                  return(NA)
+                }
+              )
+            }
+            video_function(image_files(), path, input$frames)
             # Report Succes of Video Creation
-            showModal(modalDialog(
-              title = span(h3(strong("Your output has been saved!"), style = 'font-size:16px;color:#6cbabf;'))
-            ))
-            utils::browseURL(path)
+            try(utils::browseURL(path))
           }
         )
         return(NULL)
