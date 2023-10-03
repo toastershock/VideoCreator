@@ -50,7 +50,8 @@ ui <- fluidPage(
     
     column(4,
            # Select folder button
-           actionButton('folder', 'Select a Folder')
+           actionButton('folder', 'Select a Folder'),
+           radioButtons("data_format", "File format", choices = c("jpg", "jpeg", "png"), inline = T)
     )
   ),
   
@@ -84,7 +85,7 @@ server <- function(input, output,session) {
   
   image_files <- reactive({
     if (input$folder != 0) {
-      details = file.info(list.files(pattern="*.png"))
+      details = file.info(list.files(pattern=paste0("*.", input$data_format)))
       
       # Sort the files
       if(input$order == "Modified"){details <- details[with(details, order(as.POSIXct(mtime))), ]}
