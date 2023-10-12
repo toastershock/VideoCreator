@@ -1,4 +1,5 @@
 library(shiny)
+library(shinyWidgets)
 library(av)
 
 
@@ -43,15 +44,33 @@ ui <- fluidPage(
   fluidRow(
     column(4, offset = 1,
            # Radio buttons for ordering options
-           radioButtons("order", "Order by:", 
-                        choices = c("Created", "Modified", "Size", "Name"),
-                        inline = TRUE)
+           #radioButtons("order", "Order by:", 
+          #              choices = c("Created", "Modified", "Size", "Name"),
+          #              inline = TRUE)
+           radioGroupButtons(
+             inputId = "order",
+             label = "Order by:",
+             choices = c("Created", "Modified", "Size", "Name"),
+             status = "primary",
+             checkIcon = list(
+               yes = icon("ok", 
+                          lib = "glyphicon"),
+               no = icon("remove",
+                         lib = "glyphicon"))
+           )
     ),
     
     column(4,
            # Select folder button
-           actionButton('folder', 'Select a Folder'),
-           radioButtons("data_format", "File format", choices = c("jpg", "jpeg", "png"), inline = T)
+           #actionButton('folder', 'Select a Folder'),
+           actionBttn("folder", "Select a Folder", style = "bordered", color = "success", icon = icon("file")),
+           radioGroupButtons("data_format", "File format", choices = c("jpg", "jpeg", "png"), 
+                             status = "primary",
+                             checkIcon = list(
+                               yes = icon("ok", 
+                                          lib = "glyphicon"),
+                               no = icon("remove",
+                                         lib = "glyphicon")))
     )
   ),
   
@@ -67,7 +86,7 @@ ui <- fluidPage(
     
     column(4,
            # Create Video button
-           shiny::actionButton("go", "Create Video", class = "btn-primary")
+           shiny::actionButton("go", "Create Video", class = "btn-danger")
     )
   )
 )
